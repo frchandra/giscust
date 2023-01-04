@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-type User struct {
+type Message struct {
 	ID           int
 	AppId        string
 	AvatarUrl    string

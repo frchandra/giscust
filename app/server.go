@@ -1,9 +1,11 @@
 package app
 
 import (
+	"bitbucket.org/frchandra/giscust/app/models"
 	"bitbucket.org/frchandra/giscust/config"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/go-gormigrate/gormigrate/v2"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"log"
@@ -36,13 +38,32 @@ func (server *Server) Initialize(appConfig *config.AppConfig) {
 
 	server.initializeRoutes(server.Router)
 
-	for _, model := range RegisterModels() {
-		err = server.DB.Debug().AutoMigrate(model.Model)
+	// Running migration
+	/*	for _, model := range RegisterModels() {
+			err = server.DB.Debug().AutoMigrate(model.Model)
+		}
+		if err != nil {
+			log.Fatal(err)
+		}*/
+
+	m := gormigrate.New(server.DB, gormigrate.DefaultOptions, []*gormigrate.Migration{
+		{
+			ID: "201608301400",
+			Migrate: func(tx *gorm.DB) error {
+				return tx.AutoMigrate(models.Message{})
+			},
+			Rollback: func(tx *gorm.DB) error {
+				return tx.Migrator().DropTable("messages")
+			},
+		},
+	})
+
+	err = m.Migrate()
+	if err == nil {
+		fmt.Println("Migration did run successfully")
+	} else {
+		fmt.Println("Could not migrate: %v", err)
 	}
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Database migrated successfully")
 
 }
 

@@ -8,6 +8,6 @@ type Model struct {
 
 func RegisterModels() []Model {
 	return []Model{
-		{Model: models.User{}},
+		{Model: models.Message{}},
 	}
 }
