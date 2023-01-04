@@ -35,6 +35,15 @@ func (server *Server) Initialize(appConfig *config.AppConfig) {
 	server.Router = gin.Default()
 
 	server.initializeRoutes(server.Router)
+
+	for _, model := range RegisterModels() {
+		err = server.DB.Debug().AutoMigrate(model.Model)
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println("Database migrated successfully")
+
 }
 
 func (server *Server) Run(addr string) {
@@ -51,5 +60,3 @@ func Run() {
 	server.Initialize(appConfig)
 	server.Run(":" + appConfig.AppPort)
 }
-
-
