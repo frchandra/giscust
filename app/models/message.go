@@ -7,6 +7,7 @@ import (
 
 type Message struct {
 	ID           int
+	TestTest     string
 	AppId        string
 	AvatarUrl    string
 	Email        string
