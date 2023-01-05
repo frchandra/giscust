@@ -31,7 +31,7 @@ func (this *MessagesService) GetOnlyMyAgents(agents []validations.Agent) []valid
 	return myAgents
 }
 
-func (this *MessagesService) GetOnlyAvailableAgents(agents []validations.Agent) []validations.Agent {
+func (this *MessagesService) GetOnlyAvailableAgent(agents []validations.Agent) validations.Agent {
 	rand.Shuffle(len(agents), func(i, j int) {
 		agents[i], agents[j] = agents[j], agents[i]
 	})
@@ -47,5 +47,5 @@ func (this *MessagesService) GetOnlyAvailableAgents(agents []validations.Agent) 
 		}
 	}
 
-	return agents
+	return agents[0]
 }

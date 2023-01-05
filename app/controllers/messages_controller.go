@@ -4,6 +4,7 @@ import (
 	"bitbucket.org/frchandra/giscust/app/services"
 	"bitbucket.org/frchandra/giscust/app/utils"
 	"bitbucket.org/frchandra/giscust/app/validations"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -51,7 +52,8 @@ func (this *MessagesController) HandleMessages(c *gin.Context) {
 			"message": "this message is temporarily on queue",
 		})
 	}
-	agents = this.messagesService.GetOnlyAvailableAgents(agents)
+	agent := this.messagesService.GetOnlyAvailableAgent(agents)
+	fmt.Println(agent)
 
 	//assign agent to a room
 
