@@ -26,15 +26,6 @@ func GetAllMigrations() []*gormigrate.Migration {
 				return tx.Debug().Migrator().DropTable(models.Message{})
 			},
 		},
-		{
-			ID: "add_test_test_column",
-			Migrate: func(tx *gorm.DB) error {
-				return tx.Debug().AutoMigrate(models.Message{})
-			},
-			Rollback: func(tx *gorm.DB) error {
-				return tx.Debug().Migrator().DropColumn(models.Message{}, "test_test")
-			},
-		},
 	}
 	return migrations
 }

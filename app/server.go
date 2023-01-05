@@ -37,7 +37,7 @@ func (server *Server) Initialize(appConfig *config.AppConfig) {
 
 	server.Router = gin.Default()
 
-	server.initializeRoutes(server.Router)
+	server.initializeRoutes()
 
 }
 

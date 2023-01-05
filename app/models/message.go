@@ -7,12 +7,11 @@ import (
 
 type Message struct {
 	ID           int
-	TestTest     string
 	AppId        string
 	AvatarUrl    string
 	Email        string
-	IsNewSession string
-	IsResolved   string
+	IsNewSession bool
+	IsResolved   bool
 	Name         string
 	RoomId       string
 	Source       string
