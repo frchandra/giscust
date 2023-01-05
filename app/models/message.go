@@ -12,6 +12,7 @@ type Message struct {
 	Email        string
 	IsNewSession bool
 	IsResolved   bool
+	IsHandled    bool
 	Name         string
 	RoomId       string
 	Source       string
