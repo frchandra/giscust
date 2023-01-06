@@ -4,7 +4,6 @@ import (
 	"bitbucket.org/frchandra/giscust/app/services"
 	"bitbucket.org/frchandra/giscust/app/utils"
 	"bitbucket.org/frchandra/giscust/app/validations"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -20,6 +19,8 @@ func NewMessageController(ms *services.MessagesService) *MessagesController {
 func (this *MessagesController) HandleMessages(c *gin.Context) {
 	var message validations.Message
 	var err error
+
+	//Decode message body
 	if err = c.ShouldBindJSON(&message); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"status":         "fail",
@@ -28,37 +29,36 @@ func (this *MessagesController) HandleMessages(c *gin.Context) {
 		return
 	}
 
-	/*	var messageFound models.Message
-		if messageFound, err = this.messagesService.UpsertMessages(&message); err != nil {
-			c.JSON(http.StatusOK, gin.H{
-				"status":  "success",
-				"message": "creating new messages",
-			})
-			return
-		}
-		c.JSON(http.StatusOK, gin.H{
-			"status":  "success",
-			"message": "updating previous message",
-			"data":    messageFound,
-		})
-		return*/
+	//Upsert the new coming message to db
+	_, err = this.messagesService.UpsertMessages(&message)
 
+	//Get all agent
 	agentsListResponse, err := utils.GetAllAgentsByDivision()
 	agents := agentsListResponse.Data
 	agents = this.messagesService.GetOnlyMyAgents(agents)
-	if len(agents) < 1 {
+	agent, err := this.messagesService.GetOnlyAvailableAgent(agents)
+
+	//If there is no appropriate agent, send a clarifying response. Message already queued on db
+	if agent == nil || err != nil {
 		c.JSON(http.StatusAccepted, gin.H{
 			"status":  "success, queued",
 			"message": "this message is temporarily on queue",
+			"details": err,
 		})
+		return
 	}
-	agent := this.messagesService.GetOnlyAvailableAgent(agents)
-	fmt.Println(agent)
 
 	//assign agent to a room
+	//response := utils.AssignAgentToRoom(agent[0].Id, message.RoomId)
 
 	//update messages status
+	this.messagesService.UpdateMessageHandled(message.RoomId)
 
 	//return response
-
+	c.JSON(http.StatusOK, gin.H{
+		"status": "success",
+		//"qiscus_agent_allocator_response": string(response),
+		"roomId": message.RoomId,
+		"agenId": agents[0].Id,
+	})
 }

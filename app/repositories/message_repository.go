@@ -34,5 +34,9 @@ func (this *MessageRepository) UpsertMessages(message *validations.Message) (mod
 
 	this.db.Save(&messageFound)
 	return messageFound, err
+}
 
+func (this *MessageRepository) UpdateMessageHandled(roomId string) error {
+	err := this.db.Model(&models.Message{}).Where("room_id = ?", roomId).Update("is_handled", true).Error
+	return err
 }
