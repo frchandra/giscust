@@ -49,16 +49,16 @@ func (this *MessagesController) HandleMessages(c *gin.Context) {
 	}
 
 	//assign agent to a room
-	//response := utils.AssignAgentToRoom(agent[0].Id, message.RoomId)
+	response := utils.AssignAgentToRoom(agent[0].Id, message.RoomId)
 
 	//update messages status
 	this.messagesService.UpdateMessageHandled(message.RoomId)
 
 	//return response
 	c.JSON(http.StatusOK, gin.H{
-		"status": "success",
-		//"qiscus_agent_allocator_response": string(response),
-		"roomId": message.RoomId,
-		"agenId": agents[0].Id,
+		"status":                          "success",
+		"qiscus_agent_allocator_response": string(response),
+		"roomId":                          message.RoomId,
+		"agenId":                          agents[0].Id,
 	})
 }

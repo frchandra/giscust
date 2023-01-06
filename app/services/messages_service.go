@@ -40,7 +40,7 @@ func (this *MessagesService) GetOnlyAvailableAgent(agents []validations.Agent) (
 
 	//Sort the agent. The agent with the less current customer count gets on top
 	sort.Slice(agents, func(i, j int) bool {
-		return agents[i].Id < agents[j].Id
+		return agents[i].CurrentCustomerCount < agents[j].CurrentCustomerCount
 	})
 
 	//Apply custom requirement: agent should only handle maximum 2 customer
