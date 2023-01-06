@@ -40,3 +40,14 @@ func (this *MessageRepository) UpdateMessageHandled(roomId string) error {
 	err := this.db.Model(&models.Message{}).Where("room_id = ?", roomId).Update("is_handled", true).Error
 	return err
 }
+
+func (this *MessageRepository) UpdateMessageSettled(roomId string) error {
+	err := this.db.Model(&models.Message{}).Where("room_id = ?", roomId).Update("is_resolved", true).Error
+	return err
+}
+
+func (this *MessageRepository) GetOldestUnresolved() (models.Message, error) {
+	var message models.Message
+	err := this.db.Where("is_handled = ?", false).Last(&message).Error
+	return message, err
+}

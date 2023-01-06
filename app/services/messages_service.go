@@ -25,7 +25,7 @@ func (this *MessagesService) UpsertMessages(message *validations.Message) (model
 func (this *MessagesService) GetOnlyMyAgents(agents []validations.Agent) []validations.Agent {
 	var myAgents []validations.Agent
 	for _, agent := range agents {
-		if strings.Contains(agent.Name, "chandra") {
+		if strings.Contains(agent.Name, "chandra1") {
 			myAgents = append(myAgents, agent)
 		}
 	}
@@ -61,4 +61,12 @@ func (this *MessagesService) GetOnlyAvailableAgent(agents []validations.Agent) (
 
 func (this *MessagesService) UpdateMessageHandled(roomId string) error {
 	return this.messageRepository.UpdateMessageHandled(roomId)
+}
+
+func (this *MessagesService) UpdateMessageSettled(roomId string) error {
+	return this.messageRepository.UpdateMessageSettled(roomId)
+}
+
+func (this *MessagesService) GetOldestUnresolved() (models.Message, error) {
+	return this.messageRepository.GetOldestUnresolved()
 }

@@ -16,5 +16,6 @@ func (server *Server) initializeRoutes() {
 	v1 := server.Router.Group("/api/v1")
 	v1.GET("/", controllers.Index)
 	v1.POST("/new_request", messageController.HandleMessages)
+	v1.POST("/close_request", messageController.HandleSettlement)
 
 }
